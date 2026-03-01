@@ -1,0 +1,41 @@
+:root {
+    --md-sys-color-primary: #6750A4;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-surface: #FEF7FF;
+    --md-sys-color-outline: #79747E;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--md-sys-color-surface);
+    color: #1C1B1F;
+}
+
+.brand-font {
+    font-family: 'Product Sans', sans-serif;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.nav-item:hover {
+    background-color: rgba(103, 80, 164, 0.08);
+    border-radius: 100px;
+}
+
+textarea:focus,
+input:focus {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.2);
+}
+
+/* Search results dropdown styling */
+#search-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
