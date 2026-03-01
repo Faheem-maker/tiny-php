@@ -1,28 +1,30 @@
-const clearBtn = document.getElementById('clear-btn');
-const copyBtn = document.getElementById('copy-btn');
-const toast = document.getElementById('toast');
+class Counter {
+    text = "";
 
-function showToast(message) {
-    toast.innerText = message;
-    toast.classList.remove('opacity-0');
-    toast.classList.add('opacity-100', '-translate-y-2');
-    setTimeout(() => {
-        toast.classList.add('opacity-0');
-        toast.classList.remove('opacity-100', '-translate-y-2');
-    }, 2000);
-}
-
-clearBtn.addEventListener('click', () => {
-    textInput.value = '';
-    updateCounts();
-    showToast('Text cleared');
-});
-copyBtn.addEventListener('click', () => {
-    if (textInput.value.length > 0) {
-        textInput.select();
-        document.execCommand('copy');
-        showToast('Copied to clipboard');
-    } else {
-        showToast('Nothing to copy');
+    get letters() {
+        return this.text.length;
     }
-});
+    get words() {
+        return this.text.split(' ').filter(s => s.trim().length > 0).length;
+    }
+    get sentences() {
+        return this.text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+    }
+    get readingTime() {
+        return Math.ceil(this.text.trim().split(/\s+/).filter(word => word.length > 0).length / 200) + 'm';
+    }
+
+    clear() {
+        this.text = "";
+        Ui.toast.success('Text cleared');
+    }
+    async copy() {
+        if (this.text == "") {
+            Ui.toast.success('Nothing to copy');
+        }
+        else {
+            await navigator.clipboard.writeText(this.text);
+            Ui.toast.success('Copied to clipboard');
+        }
+    }
+}
