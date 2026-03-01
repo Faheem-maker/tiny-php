@@ -3,30 +3,31 @@
 ])
 
 @{
-    $app->assets->addScript('/js/tools/text/counter.js');
+    $app->assets->addScript('js/tools/text/counter.js');
+    $app->assets->addScript('js/ui/toast.js');
 }
 
-<Ui.Card data-scope="counter: {text: ''}">
+<Ui.Card data-controller="counter: Counter">
     <Layout.Row cols="2" cols-md="4">
         <Ui.TitleCard
             color="primary"
-            data-text="counter.text.length"
+            data-text="counter.letters"
             title="Characters"
             />
         <Ui.TitleCard
             color="primary"
-            data-text="counter.text.split(' ').filter(s => s.trim().length > 0).length"
+            data-text="counter.words"
             title="Words"
             />
         
         <Ui.TitleCard
             color="light"
-            data-text="counter.text.split(/[.!?]+/).filter(s => s.trim().length > 0).length"
+            data-text="counter.sentences"
             title="Sentences"
             />
         <Ui.TitleCard
             color="light"
-            data-text="Math.ceil(counter.text.trim().split(/\s+/).filter(word => word.length > 0).length / 200) + 'm'"
+            data-text="counter.readingTime"
             title="Reading Time"
             />
     </Layout.Row>
@@ -36,17 +37,12 @@
         data-bind="text"
         placeholder="Start typing or paste your text here..."/>
 
-    <div class="mt-6 flex justify-end gap-3">
-        <button id="clear-btn" class="px-6 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+    <Layout.Flex justify="end">
+        <Forms.PillButton data-onclick="counter.clear()">
             Clear Text
-        </button>
-        <button id="copy-btn" class="px-6 py-2.5 text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 rounded-full shadow-lg shadow-indigo-200 transition-all">
+        </Forms.PillButton>
+        <Forms.PillButton variant="primary" data-onclick="counter.copy()">
             Copy Text
-        </button>
-    </div>
+        </Forms.PillButton>
+    </Layout.Flex>
 </Ui.Card>
-
-<!-- Feedback Message -->
-<div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full text-sm font-medium opacity-0 pointer-events-none transition-all">
-    Copied to clipboard
-</div>

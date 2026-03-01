@@ -11,12 +11,14 @@ use framework\web\widgets\Widget;
 class Card extends Widget {
     public $color = 'white';
     public $data_scope;
+    public $data_controller;
     
     public function run() {
         return $this->renderPartial('card', [
             'content' => $this->content,
             'attrs' => $this->attributes([
                 'data-scope' => $this->data_scope,
+                'data-controller' => $this->data_controller,
             ]),
         ]);
     }

@@ -7,6 +7,7 @@
         $app->assets->addScript('js/main.js');
         $app->assets->addScript('js/tiny/main.js');
         $app->assets->addCss('css/style.css');
+        $app->assets->addScript('js/ui/ui.js');
     }
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
