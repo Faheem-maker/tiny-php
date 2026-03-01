@@ -45,6 +45,49 @@ The `data-bind` attribute creates two-way binding for form elements (inputs, tex
 
 *Note: The `data-bind` property matches a key in the current scope's state.*
 
+## Controllers
+Controllers allows you to separate business logic and UI without having to manage DOM manually.
+
+### Defining a Controller
+Just like a scope, you can define it with `data-controller` attribute:
+
+```html
+<div data-controller="counter: Counter">
+    <div data-text="counter.text"></div>
+</div>
+```
+You then need to define a JS class that implements the default state and functionality:
+```js
+class Counter {
+    text = "";
+}
+```
+
+It's possible to implement methods and properties to manage advanced functionality. A complete example follows:
+
+```html
+<div data-controller="counter: Counter">
+    <textarea data-bind="text"></textarea>
+    <div data-text="counter.letters">
+    </div>
+    <button data-onclick="counter.clear()">Clear Text</button>
+</div>
+```
+
+```js
+class Counter {
+    text = "";
+
+    get letters() {
+        return this.text.length;
+    }
+
+    clear() {
+        this.text = "";
+    }
+}
+```
+
 ## TrackedScope (The Magic Behind the Scenes)
 
 Under the hood, TinyJS uses the `TrackedScope` class, which uses ES6 Proxies to intercept property access.
