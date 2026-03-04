@@ -1,0 +1,51 @@
+<?php
+
+namespace framework\web\request;
+
+/**
+ * Request Class
+ * 
+ * This class provides several helper
+ * methods and utilities over the raw
+ * $_GET, $_POST, $_FILES, etc. superglobals.
+ */
+class Request {
+    /**
+     * Get a value from the $_GET superglobal, with an optional default.
+     * 
+     * @param string $key The key to retrieve from the $_GET array.
+     * @param mixed $default The default value to return if the key is not set.
+     * @return mixed The value from $_GET if set, otherwise the default value.
+     */
+    public function get(string $key, $default = null) {
+        return $_GET[$key] ?? $default;
+    }
+
+    /**
+     * Get a value from the $_POST superglobal, with an optional default.
+     * @param string $key The key to retrieve from the $_POST array.
+     * @param mixed $default The default value to return if the key is not set.
+     * @return mixed The value from $_POST if set, otherwise the default value.
+     */
+    public function post(string $key, $default = null) {
+        return $_POST[$key] ?? $default;
+    }
+
+    /**
+     * Get a value from either $_POST or $_GET, with an optional default. POST takes precedence over GET.
+     * @param string $key The key to retrieve from the $_POST or $_GET arrays.
+     * @param mixed $default The default value to return if the key is not set.
+     * @return mixed The value from $_POST if set, otherwise the value from $_GET, or the default value.
+     */
+    public function input(string $key, $default = null) {
+        return $this->post($key, $this->get($key, $default));
+    }
+
+    /**
+     * Get the HTTP method of the request, supporting method override via a __method query parameter. Defaults to GET if not specified.
+     * @return string The HTTP method of the request.
+     */
+    public function method() {
+        return $_GET['__method'] ?? $_SERVER['REQUEST_METHOD'] ?? 'GET';
+    }
+}
