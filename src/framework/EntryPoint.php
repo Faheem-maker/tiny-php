@@ -13,9 +13,9 @@ class EntryPoint {
         $method = $action[1];
 
         // Initialize the controller
-        $obj = new $controller();
+        $obj = $app->di->make($controller);
 
-        $result = $obj->$method();
+        $result = $app->di->invoke($obj, $method);
 
         if (!empty($result)) {
             if (is_string($result)) {

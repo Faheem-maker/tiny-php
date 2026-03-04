@@ -10,6 +10,10 @@ namespace framework;
  * Known Components
  * @property web\components\Config $config Configuration component
  * @property web\components\PathManger $path Path manager component
+ * @property web\components\UrlManager $url URL manager component
+ * @property web\components\AssetManager $assets Asset manager component
+ * @property web\components\WidgetManager $widgets Widget manager component
+ * @property web\components\DependencyContainer $di Dependency injection container component
  */
 class Application
 {
