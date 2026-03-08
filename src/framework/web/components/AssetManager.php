@@ -3,6 +3,7 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 use RuntimeException;
 
 /**
@@ -10,7 +11,7 @@ use RuntimeException;
  * manage assets. This would automatically
  * publish and render the assets as needed.
  */
-class AssetManager {
+class AssetManager extends Component {
     protected string $sourcePath;
     protected string $publicPath;
     protected string $publicUrl;
@@ -20,8 +21,8 @@ class AssetManager {
 
     protected string $hash;
 
-    public function __construct(
-    ) {
+    public function init(): void
+    {
         $app = Application::get();
 
         $this->sourcePath = $app->path->resources();

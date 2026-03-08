@@ -3,9 +3,10 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 use framework\web\widgets\Widget;
 
-class WidgetManager {
+class WidgetManager extends Component{
     /**
      * Renders a widget and returns its
      * HTML representation as string.

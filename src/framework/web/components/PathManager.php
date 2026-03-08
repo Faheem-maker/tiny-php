@@ -3,6 +3,7 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 
 /**
  * Class PathManager
@@ -16,7 +17,7 @@ use framework\Application;
  * $paths->app();               // /var/www/myapp/app
  * $paths->config('app.php');   // /var/www/myapp/config/app.php
  */
-class PathManager
+class PathManager extends Component
 {
     /**
      * The root directory of the application.
@@ -33,7 +34,7 @@ class PathManager
      */
     protected Config $config;
 
-    public function __construct()
+    public function init(): void
     {
         $app = Application::get();
         $this->rootPath = $app->config->base_dir;

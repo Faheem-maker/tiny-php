@@ -3,6 +3,7 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 
 /**
  * URL Manager
@@ -14,7 +15,7 @@ use framework\Application;
  *  - Working with named routes
  *  - Assisting redirects and navigation helpers
  */
-class UrlManager
+class UrlManager extends Component
 {
     /**
      * Base URL (scheme + host + optional subfolder)
@@ -29,7 +30,7 @@ class UrlManager
     /**
      * Constructor
      */
-    public function __construct()
+    public function init(): void
     {
         $app = Application::get();
         $config = $app->config;

@@ -2,13 +2,15 @@
 
 namespace framework\web\components;
 
+use framework\web\interfaces\Component;
+
 /**
  * Application configuration container
  *
  * @property string $base_dir Absolute path to root directory
  * @property string $base_url The URL of the website
  */
-class Config
+class Config extends Component
 {
     protected array $data = [];
 
