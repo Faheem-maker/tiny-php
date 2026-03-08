@@ -2,6 +2,7 @@
 
 namespace framework\web\components;
 
+use framework\utils\ConfigContainer;
 use framework\web\interfaces\Component;
 
 /**
@@ -12,16 +13,26 @@ use framework\web\interfaces\Component;
  */
 class Config extends Component
 {
-    protected array $data = [];
+    protected ConfigContainer $container;
+
+    public function __construct()
+    {
+        $this->container = new ConfigContainer();
+    }
 
     public function __get(string $name)
     {
-        return $this->data[$name] ?? null;
+        return $this->container->get($name);
     }
 
     public function __set(string $name, $value): void
     {
-        $this->data[$name] = $value;
+        $this->container->set($name, $value);
+    }
+
+    public function set(string $key, $value): void
+    {
+        $this->container->set($key, $value);
     }
 
     /**
@@ -32,16 +43,6 @@ class Config extends Component
      */
     public function get(string $key, $default = null)
     {
-        $segments = explode('.', $key);
-        $value = $this->data;
-
-        foreach ($segments as $segment) {
-            if (!is_array($value) || !array_key_exists($segment, $value)) {
-                return $default;
-            }
-            $value = $value[$segment];
-        }
-
-        return $value;
+        return $this->container->get($key, $default);
     }
 }

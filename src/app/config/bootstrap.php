@@ -8,6 +8,7 @@
 
 use framework\Application;
 use framework\web\components\Config;
+use framework\utils\helpers\DirectoryHelper;
 
 require_once __DIR__ . '/routes.php';
 
@@ -17,5 +18,7 @@ $app->registerComponent('config', new Config());
 
 $config = $app->config;
 
-require_once __DIR__ . '/urls.php';
-require_once __DIR__ . '/services.php';
+foreach (DirectoryHelper::listFiles(__DIR__, 'bootstrap.php') as $file) {
+    require_once __DIR__ . '/' . $file;
+    $config->set(pathinfo($file, PATHINFO_FILENAME), require_once __DIR__ . '/' . $file);
+}

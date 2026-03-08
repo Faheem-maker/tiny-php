@@ -18,3 +18,11 @@ function request() {
 function view() {
     return response()->view(...func_get_args());
 }
+
+function config($key = null, $default = null) {
+    if ($key === null) {
+        return app()->config;
+    }
+
+    return app()->config->get($key, $default);
+}
