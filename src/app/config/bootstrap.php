@@ -19,6 +19,8 @@ $app->registerComponent('config', new Config());
 $config = $app->config;
 
 foreach (DirectoryHelper::listFiles(__DIR__, 'bootstrap.php') as $file) {
-    require_once __DIR__ . '/' . $file;
-    $config->set(pathinfo($file, PATHINFO_FILENAME), require_once __DIR__ . '/' . $file);
+    $res = require_once __DIR__ . '/' . $file;
+    if (!empty($res)) {
+        $config->set(pathinfo($file, PATHINFO_FILENAME), $res);
+    }
 }

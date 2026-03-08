@@ -26,19 +26,9 @@ class PathManager extends Component
      */
     protected string $rootPath;
 
-    /**
-     * The configuration object 
-     *   (Required for dir resolution)
-     * 
-     * @var Config
-     */
-    protected Config $config;
-
     public function init(): void
     {
-        $app = Application::get();
-        $this->rootPath = $app->config->base_dir;
-        $this->config = $app->config;
+        $this->rootPath = config('paths.base_dir');
     }
 
     /**
@@ -66,7 +56,7 @@ class PathManager extends Component
             $remainingPath = substr($path, $slashPos + 1);
 
             // Fetch the base directory for this tag from config
-            $dirBase = $this->config->dirs[$dirKey] ?? '';
+            $dirBase = config("paths.{$dirKey}") ?? '';
 
             return $this->normalize($this->join($dirBase, $remainingPath));
         }

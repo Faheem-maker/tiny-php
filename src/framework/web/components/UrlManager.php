@@ -35,7 +35,7 @@ class UrlManager extends Component
         $app = Application::get();
         $config = $app->config;
         
-        $this->baseUrl = $config->base_url;
+        $this->baseUrl = config('app.base_url');
         $this->currentPath = $this->removeBase($app->route);
     }
 
