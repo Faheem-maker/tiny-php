@@ -2,24 +2,37 @@
 
 namespace framework\web\components;
 
+use framework\utils\ConfigContainer;
+use framework\web\interfaces\Component;
+
 /**
  * Application configuration container
  *
  * @property string $base_dir Absolute path to root directory
  * @property string $base_url The URL of the website
  */
-class Config
+class Config extends Component
 {
-    protected array $data = [];
+    protected ConfigContainer $container;
+
+    public function __construct()
+    {
+        $this->container = new ConfigContainer();
+    }
 
     public function __get(string $name)
     {
-        return $this->data[$name] ?? null;
+        return $this->container->get($name);
     }
 
     public function __set(string $name, $value): void
     {
-        $this->data[$name] = $value;
+        $this->container->set($name, $value);
+    }
+
+    public function set(string $key, $value): void
+    {
+        $this->container->set($key, $value);
     }
 
     /**
@@ -30,16 +43,6 @@ class Config
      */
     public function get(string $key, $default = null)
     {
-        $segments = explode('.', $key);
-        $value = $this->data;
-
-        foreach ($segments as $segment) {
-            if (!is_array($value) || !array_key_exists($segment, $value)) {
-                return $default;
-            }
-            $value = $value[$segment];
-        }
-
-        return $value;
+        return $this->container->get($key, $default);
     }
 }

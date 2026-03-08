@@ -3,6 +3,7 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 
 /**
  * Class PathManager
@@ -16,7 +17,7 @@ use framework\Application;
  * $paths->app();               // /var/www/myapp/app
  * $paths->config('app.php');   // /var/www/myapp/config/app.php
  */
-class PathManager
+class PathManager extends Component
 {
     /**
      * The root directory of the application.
@@ -25,19 +26,9 @@ class PathManager
      */
     protected string $rootPath;
 
-    /**
-     * The configuration object 
-     *   (Required for dir resolution)
-     * 
-     * @var Config
-     */
-    protected Config $config;
-
-    public function __construct()
+    public function init(): void
     {
-        $app = Application::get();
-        $this->rootPath = $app->config->base_dir;
-        $this->config = $app->config;
+        $this->rootPath = config('paths.base_dir');
     }
 
     /**
@@ -65,7 +56,7 @@ class PathManager
             $remainingPath = substr($path, $slashPos + 1);
 
             // Fetch the base directory for this tag from config
-            $dirBase = $this->config->dirs[$dirKey] ?? '';
+            $dirBase = config("paths.{$dirKey}") ?? '';
 
             return $this->normalize($this->join($dirBase, $remainingPath));
         }

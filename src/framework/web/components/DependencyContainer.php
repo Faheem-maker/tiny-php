@@ -4,11 +4,12 @@ namespace framework\web\components;
 
 use Closure;
 use Exception;
+use framework\web\interfaces\Component;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 
-class DependencyContainer {
+class DependencyContainer extends Component {
     private array $instances = [];
     private array $definitions = [];
 

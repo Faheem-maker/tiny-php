@@ -2,6 +2,8 @@
 
 namespace framework;
 
+use framework\web\interfaces\Component;
+
 /**
  * The base class for all applications.
  * It supports component binding
@@ -19,6 +21,10 @@ class Application
 {
     protected static ?Application $instance = null;
 
+    /**
+     * Container for registered components
+     * @var array<string, Component>
+     */
     protected array $components = [];
     public string $route;
 
@@ -29,7 +35,14 @@ class Application
         $this->route = $route;
     }
 
+    public function init() {
+        foreach ($this->components as $component) {
+            $component->init();
+        }
+    }
+
     public function run($method) {
+        $this->init();
         $entryPoint = new EntryPoint();
 
         $entryPoint->run($method);
@@ -58,7 +71,7 @@ class Application
     /**
      * Register a component in the container
      */
-    public function registerComponent(string $name, $component): void
+    public function registerComponent(string $name, Component $component): void
     {
         $this->components[$name] = $component;
     }

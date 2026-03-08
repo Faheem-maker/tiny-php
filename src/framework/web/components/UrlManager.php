@@ -3,6 +3,7 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\web\interfaces\Component;
 
 /**
  * URL Manager
@@ -14,7 +15,7 @@ use framework\Application;
  *  - Working with named routes
  *  - Assisting redirects and navigation helpers
  */
-class UrlManager
+class UrlManager extends Component
 {
     /**
      * Base URL (scheme + host + optional subfolder)
@@ -29,13 +30,13 @@ class UrlManager
     /**
      * Constructor
      */
-    public function __construct()
+    public function init(): void
     {
         $app = Application::get();
-        $config = $app->config;
         
-        $this->baseUrl = $config->base_url;
-        $this->currentPath = $this->removeBase($app->route);
+        $this->baseUrl = config('app.base_url');
+        $this->currentPath = $this->normalize($this->removeBase($app->route));
+
     }
 
     /* -----------------------------------------------------------------
@@ -115,10 +116,39 @@ class UrlManager
 
     /**
      * Normalize a path (remove duplicate slashes, resolve dots, etc.)
+     * 
+     * This method ensures a leading slash, removes trailing slashes (except for root), and resolves any '.' or '..' segments in the path. It also removes any duplicate slashes.
      */
     public function normalize(string $path): string
     {
-        // TODO: Implement
+        // Ensure leading slash
+        if (!str_starts_with($path, '/')) {
+            $path = '/' . $path;
+        }
+
+        // Remove trailing slash except for root
+        if ($path !== '/' && str_ends_with($path, '/')) {
+            $path = rtrim($path, '/');
+        }
+
+        // Split into segments and process
+        $segments = explode('/', $path);
+        $normalized = [];
+        foreach ($segments as $segment) {
+            if ($segment === '' || $segment === '.') {
+                continue;
+            } elseif ($segment === '..') {
+                array_pop($normalized);
+            } else {
+                $normalized[] = $segment;
+            }
+        }
+
+        // Rejoin
+        $result = '/' . implode('/', $normalized);
+
+        // Ensure root if empty
+        return $result === '/' ? '/' : $result;
     }
 
     /**
