@@ -1,2 +1,4 @@
 src/app/runtime/**
 src/public/assets/**
+
+src/.env

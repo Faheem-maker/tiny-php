@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'app_name' => 'Tiny Tools',
-    'debug' => true,
-    'base_url' => '/tiny-tools/src',
+    'app_name' => env('APP_NAME'),
+    'debug' => env('ENVIRONMENT') === 'DEBUG',
+    'base_url' => env('BASE_URL'),
 ];

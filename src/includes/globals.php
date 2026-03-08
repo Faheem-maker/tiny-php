@@ -26,3 +26,10 @@ function config($key = null, $default = null) {
 
     return app()->config->get($key, $default);
 }
+
+function env($key, $default = null) {
+    if ($key === null) {
+        return $_ENV;
+    }
+    return $_ENV[$key] ?? $default;
+}

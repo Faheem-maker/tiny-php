@@ -6,21 +6,20 @@
  * required components
  */
 
-use framework\Application;
 use framework\web\components\Config;
 use framework\utils\helpers\DirectoryHelper;
+use framework\utils\helpers\DotenvHelper;
 
 require_once __DIR__ . '/routes.php';
 
-$app = Application::get();
+// Load dotenv
+DotenvHelper::load(__DIR__ . '/../../.env');
 
-$app->registerComponent('config', new Config());
-
-$config = $app->config;
+app()->registerComponent('config', new Config());
 
 foreach (DirectoryHelper::listFiles(__DIR__, 'bootstrap.php') as $file) {
     $res = require_once __DIR__ . '/' . $file;
     if (!empty($res)) {
-        $config->set(pathinfo($file, PATHINFO_FILENAME), $res);
+        app()->config->set(pathinfo($file, PATHINFO_FILENAME), $res);
     }
 }
