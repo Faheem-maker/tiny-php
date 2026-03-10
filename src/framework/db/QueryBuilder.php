@@ -6,10 +6,12 @@ use framework\db\commands\SelectCommand;
 use framework\db\drivers\BaseDriver;
 use framework\web\interfaces\Component;
 
-class QueryBuilder extends Component {
+class QueryBuilder extends Component
+{
     protected BaseDriver $conn;
 
-    public function __construct(BaseDriver $conn) {
+    public function __construct(BaseDriver $conn)
+    {
         $this->conn = $conn;
     }
 
@@ -18,7 +20,8 @@ class QueryBuilder extends Component {
         $this->conn->connect();
     }
 
-    public function select($cols) {
+    public function select($cols = '*')
+    {
         return new SelectCommand($this->conn, $cols);
     }
 }
