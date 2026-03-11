@@ -36,6 +36,8 @@ class MySqlDriver extends BaseDriver
         switch ($type) {
             case 'select':
                 return $this->compileSelect($components);
+            case 'update':
+                return $this->compileUpdate($components);
             default:
                 throw new Exception("Unsupported query type: {$type}");
         }
@@ -50,9 +52,31 @@ class MySqlDriver extends BaseDriver
             $query .= " {$join['type']} JOIN {$join['table']} ON {$join['condition']}";
         }
 
+        $query = $this->compileWhere($query, $components['where']);
+
+        return $query;
+    }
+
+    protected function compileUpdate(array $components)
+    {
+        $query = 'UPDATE ' . $components['table'] . ' SET ';
+
+        foreach ($components['columns'] as $key => $_) {
+            $query .= "$key = :$key,";
+        }
+
+        $query = \rtrim($query, ',');
+
+        $query = $this->compileWhere($query, $components['where']);
+
+        return $query;
+    }
+
+    protected function compileWhere(string $query, array $where)
+    {
         $query .= ' WHERE 1 = 1';
 
-        foreach ($components['where'] as $cond) {
+        foreach ($where as $cond) {
             $query .= " {$cond['operator']} {$cond['condition']}";
         }
 
