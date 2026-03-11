@@ -11,7 +11,9 @@ trait HasWhere
         if (!\is_array($params)) {
             $cnt = \count($this->params);
             $condition = "$condition = :p$cnt";
-            $params["p$cnt"] = $params;
+            $params = [
+                ":p$cnt" => $params,
+            ];
         }
         $this->where[] = [
             'type' => 'condition',
