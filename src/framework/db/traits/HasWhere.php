@@ -8,6 +8,11 @@ trait HasWhere
 
     public function where($condition, $params = [], $operator = 'AND')
     {
+        if (!\is_array($params)) {
+            $cnt = \count($this->params);
+            $condition = "$condition = :p$cnt";
+            $params["p$cnt"] = $params;
+        }
         $this->where[] = [
             'type' => 'condition',
             'operator' => $operator,
