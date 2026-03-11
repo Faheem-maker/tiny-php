@@ -23,6 +23,9 @@ function view()
     return response()->view(...func_get_args());
 }
 
+/**
+ * @return framework\db\QueryBuilder|null
+ */
 function db()
 {
     return app()->db;
