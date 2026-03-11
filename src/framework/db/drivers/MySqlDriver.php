@@ -44,8 +44,12 @@ class MySqlDriver extends BaseDriver
     protected function compileSelect(array $components): string
     {
         $cols = implode(', ', $components['columns'] ?? ['*']);
-        $query = "SELECT {$cols} FROM {$components['table']}";
-        // Add more logic to handle WHERE, ORDER BY, LIMIT, etc.
+        $query = "SELECT {$cols} FROM {$components['table']} WHERE 1 = 1";
+
+        foreach ($components['where'] as $cond) {
+            $query .= " {$cond['operator']} {$cond['condition']}";
+        }
+
         return $query;
     }
 
