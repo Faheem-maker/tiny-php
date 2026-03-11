@@ -2,6 +2,7 @@
 
 namespace framework\db\commands;
 
+use framework\db\traits\HasJoin;
 use \framework\db\traits\HasTable;
 use \framework\db\drivers\BaseDriver;
 use framework\db\traits\HasWhere;
@@ -13,10 +14,11 @@ class SelectCommand extends BaseCommand
 
     use HasTable;
     use HasWhere;
+    use HasJoin;
 
     public function __construct(BaseDriver $driver, string|array $cols)
     {
-        if (is_string($cols)) {
+        if (\is_string($cols)) {
             $cols = explode(',', $cols);
         }
 
@@ -28,9 +30,10 @@ class SelectCommand extends BaseCommand
     {
         return $this->conn->compile('select', [
             'table' => $this->table,
-            'cols' => $this->cols,
+            'columns' => $this->cols,
             'condition' => $this->where,
             'where' => $this->where,
+            'joins' => $this->joins,
         ]);
     }
 
