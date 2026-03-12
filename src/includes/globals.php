@@ -3,23 +3,36 @@
 use framework\Application;
 use framework\web\request\Response;
 
-function app() {
+function app()
+{
     return Application::get();
 }
 
-function response() {
+function response()
+{
     return new Response();
 }
 
-function request() {
+function request()
+{
     return app()->di->get(\framework\web\request\Request::class);
 }
 
-function view() {
+function view()
+{
     return response()->view(...func_get_args());
 }
 
-function config($key = null, $default = null) {
+/**
+ * @return framework\db\QueryBuilder|null
+ */
+function db()
+{
+    return app()->db;
+}
+
+function config($key = null, $default = null)
+{
     if ($key === null) {
         return app()->config;
     }
@@ -27,7 +40,8 @@ function config($key = null, $default = null) {
     return app()->config->get($key, $default);
 }
 
-function env($key, $default = null) {
+function env($key, $default = null)
+{
     if ($key === null) {
         return $_ENV;
     }
