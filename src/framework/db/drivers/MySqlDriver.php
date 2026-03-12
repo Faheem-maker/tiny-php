@@ -72,12 +72,22 @@ class MySqlDriver extends BaseDriver
         return $query;
     }
 
-    protected function compileWhere(string $query, array $where)
+    protected function compileWhere(string $query, array $where, bool $root = true)
     {
-        $query .= ' WHERE 1 = 1';
+        if ($root) {
+            $query .= ' WHERE 1 = 1';
+        }
 
-        foreach ($where as $cond) {
-            $query .= " {$cond['operator']} {$cond['condition']}";
+        foreach ($where as $i => $cond) {
+            $operator = ($root || $i > 0) ? " {$cond['operator']}" : "";
+
+            if (isset($cond['type']) && $cond['type'] === 'group') {
+                $query .= "{$operator} (";
+                $query = $this->compileWhere($query, $cond['conditions'], false);
+                $query .= ")";
+            } else {
+                $query .= "{$operator} {$cond['condition']}";
+            }
         }
 
         return $query;
