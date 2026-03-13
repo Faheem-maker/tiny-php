@@ -2,7 +2,7 @@
 
 namespace framework\db\traits;
 
-use framework\db\commands\WhereCommand;
+use framework\db\commands\WhereClause;
 
 
 trait HasWhere
@@ -12,7 +12,7 @@ trait HasWhere
     public function where($condition, $params = [], $operator = 'AND')
     {
         if (\is_callable($condition)) {
-            $whereCommand = new WhereCommand($this->params);
+            $whereCommand = new WhereClause($this->params);
             $condition($whereCommand);
 
             $this->where[] = [
