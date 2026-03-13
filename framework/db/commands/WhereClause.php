@@ -4,7 +4,7 @@ namespace framework\db\commands;
 
 use framework\db\traits\HasWhere;
 
-class WhereCommand
+class WhereClause
 {
     use HasWhere;
 
