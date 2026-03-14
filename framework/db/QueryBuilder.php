@@ -2,6 +2,8 @@
 
 namespace framework\db;
 
+use framework\db\commands\DeleteCommand;
+use framework\db\commands\InsertCommand;
 use framework\db\commands\SelectCommand;
 use framework\db\commands\UpdateCommand;
 use framework\db\drivers\BaseDriver;
@@ -29,5 +31,14 @@ class QueryBuilder extends Component
     public function update($table, $cols)
     {
         return new UpdateCommand($this->conn, $table, $cols);
+    }
+
+    public function insert($table, $cols) {
+        return (new InsertCommand($this->conn, $table, $cols))
+            ->execute();
+    }
+
+    public function delete($table) {
+        return new DeleteCommand($this->conn, $table);
     }
 }
