@@ -16,6 +16,10 @@ class Routes {
         static::route($route, $action, 'GET');
     }
 
+    public static function post($route, $action) {
+        static::route($route, $action, 'POST');
+    }
+
     public static function resolve($route, $method) {
         return static::$routes[$route][$method];
     }
