@@ -13,7 +13,7 @@ class Model {
         return $reflection->hasProperty($name);
     }
 
-    protected static function basename() {
+    public static function basename() {
         $cls = \get_called_class();
         $cls = explode('\\', $cls);
         return end($cls);
@@ -52,24 +52,43 @@ class Model {
     /**
      * Instance Methods
      */
+    public function rules() {
+        return [];
+    }
 
     public function validate() {
         $metaData = self::getMetaData();
         $valid = true;
+        $rules = self::rules();
 
         foreach ($metaData as $property => $data) {
             foreach ($data['attributes'] as $attribute) {
                 $instance = $attribute->newInstance();
-                if ($instance instanceof Validator) {
-                    $value = $this->$property;
-                    if (!$instance->validate($value)) {
-                        $valid = false;
-                        $this->errors[$property][] = $instance->message();
-                        break;
-                    }
+                $rules[$property][] = $instance;
+            }
+        }
+
+        $this->errors = app()->validator->validate($this, $rules);
+        return empty($this->errors);
+    }
+
+    public function errors($name = '') {
+        if ($name) {
+            return $this->errors[$name] ?? '';
+        }
+        return $this->errors;
+    }
+
+    public static function label($property) {
+        $metaData = self::getMetaData();
+        if (isset($metaData[$property])) {
+            foreach ($metaData[$property]['attributes'] as $attribute) {
+                $instance = $attribute->newInstance();
+                if (method_exists($instance, 'label')) {
+                    return $instance->label();
                 }
             }
         }
-        return $valid;
+        return ucfirst($property);
     }
 }

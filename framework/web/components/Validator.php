@@ -1,0 +1,46 @@
+<?php
+
+namespace framework\web\components;
+
+use framework\web\interfaces\Component;
+use framework\web\models\attributes\Email;
+use framework\web\models\attributes\Required;
+
+class Validator extends Component {
+    protected $registry;
+
+    public function __construct()
+    {
+        $this->registry = [
+            'required' => Required::class,
+            'email' => Email::class,
+        ];
+    }
+
+    public function addValidator($name, $class)
+    {
+        $this->registry[$name] = $class;
+    }
+
+    public function validate($data, $rules) {
+        $errors = [];
+        foreach ($rules as $field => $validators) {
+            foreach ($validators as $validator) {
+                if ($validator instanceof \framework\web\interfaces\Validator) {
+                    if (!$validator->validate($data->$field ?? null)) {
+                        $errors[$field] = $validator->message();
+                        break;
+                    }
+                } elseif (isset($this->registry[$validator])) {
+                    $validatorClass = $this->registry[$validator];
+                    $validatorInstance = new $validatorClass();
+                    if (!$validatorInstance->validate($data->$field ?? null)) {
+                        $errors[$field] = $validatorInstance->message;
+                        break;
+                    }
+                }
+            }
+        }
+        return $errors;
+    }
+}
