@@ -43,4 +43,16 @@ class SelectCommand extends BaseCommand
 
         return $this->conn->execute($sql, $this->params)->fetchAll();
     }
+
+    public function first()
+    {
+        $sql = $this->compile();
+        return $this->conn->execute($sql, $this->params)->fetch();
+    }
+
+    public function count()
+    {
+        $sql = $this->compile();
+        return $this->conn->execute($sql, $this->params)->rowCount();
+    }
 }

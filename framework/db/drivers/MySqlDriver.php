@@ -38,6 +38,10 @@ class MySqlDriver extends BaseDriver
                 return $this->compileSelect($components);
             case 'update':
                 return $this->compileUpdate($components);
+            case 'insert':
+                return $this->compileInsert($components);
+            case 'delete':
+                return $this->compileDelete($components);
             default:
                 throw new Exception("Unsupported query type: {$type}");
         }
@@ -56,6 +60,22 @@ class MySqlDriver extends BaseDriver
 
         return $query;
     }
+    
+    protected function compileDelete(array $components): string
+    {
+        $query = "DELETE FROM {$components['table']}";
+
+        $query = $this->compileWhere($query, $components['where']);
+
+        return $query;
+    }
+
+    protected function compileInsert(array $components) {
+        $cols = implode(', ', array_keys($components['columns']));
+        $placeholders = implode(', ', array_map(fn($key) => ":$key", array_keys($components['columns'])));
+
+        return "INSERT INTO {$components['table']} ({$cols}) VALUES ({$placeholders})";
+    }
 
     protected function compileUpdate(array $components)
     {
@@ -72,12 +92,22 @@ class MySqlDriver extends BaseDriver
         return $query;
     }
 
-    protected function compileWhere(string $query, array $where)
+    protected function compileWhere(string $query, array $where, bool $root = true)
     {
-        $query .= ' WHERE 1 = 1';
+        if ($root) {
+            $query .= ' WHERE 1 = 1';
+        }
 
-        foreach ($where as $cond) {
-            $query .= " {$cond['operator']} {$cond['condition']}";
+        foreach ($where as $i => $cond) {
+            $operator = ($root || $i > 0) ? " {$cond['operator']}" : "";
+
+            if (isset($cond['type']) && $cond['type'] === 'group') {
+                $query .= "{$operator} (";
+                $query = $this->compileWhere($query, $cond['conditions'], false);
+                $query .= ")";
+            } else {
+                $query .= "{$operator} {$cond['condition']}";
+            }
         }
 
         return $query;
