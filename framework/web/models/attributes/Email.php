@@ -6,13 +6,11 @@ use Attribute;
 use framework\web\interfaces\Validator;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
-class Required extends Validator
-{
-    public $message = 'This field is required';
+class Email extends Validator {
+    public $message = 'Please enter a valid email';
 
     public function validate($value, $_ = null): bool
     {
-        return !empty($value);
+        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
     }
-
 }

@@ -2,10 +2,11 @@
 
 namespace framework\web\models;
 
-use framework\web\interfaces\ValidationAttribute;
-use framework\web\request\Request;
+use framework\web\interfaces\Validator;
 
 class Model {
+    public $errors = [];
+
     protected static function hasProperty($name) {
         $cls = \get_called_class();
         $reflection = new \ReflectionClass($cls);
@@ -54,17 +55,21 @@ class Model {
 
     public function validate() {
         $metaData = self::getMetaData();
+        $valid = true;
+
         foreach ($metaData as $property => $data) {
             foreach ($data['attributes'] as $attribute) {
                 $instance = $attribute->newInstance();
-                if ($instance instanceof ValidationAttribute) {
+                if ($instance instanceof Validator) {
                     $value = $this->$property;
                     if (!$instance->validate($value)) {
-                        return false;
+                        $valid = false;
+                        $this->errors[$property][] = $instance->message();
+                        break;
                     }
                 }
             }
         }
-        return true;
+        return $valid;
     }
 }
