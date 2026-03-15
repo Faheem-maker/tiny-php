@@ -84,7 +84,7 @@ class UrlManager extends Component
 
         $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
 
-        return $this->join("$scheme://$host", $this->baseUrl);
+        return $this->join("$scheme://$host", trim($this->baseUrl, '/'));
     }
 
     public function public(): string {
@@ -164,7 +164,7 @@ class UrlManager extends Component
      */
     protected function trimTrailingSlash(string $path): string
     {
-        // TODO: Implement
+        return rtrim($path, '/') ?: '/';
     }
 
     /**
@@ -193,7 +193,10 @@ class UrlManager extends Component
      */
     public function to(string $path = '/', array $query = [], bool $absolute = false): string
     {
-        // TODO: Implement
+        if ($absolute) {
+            return $path;
+        }
+        return $this->base() . '/' . trim($path, '/') . ($query ? '?' . http_build_query($query) : '');
     }
 
     /**

@@ -28,6 +28,10 @@ class ViewCompiler
     protected $layout = null;
     protected $layoutData = null;
 
+    protected $data = [];
+
+    protected $widgets = [];
+
     public function __construct(string $templateDir, string $cacheDir)
     {
         $this->cacheDir = rtrim($cacheDir, '/');
@@ -57,16 +61,16 @@ class ViewCompiler
                 // var_export handles escaping single quotes and wrapping the string perfectly
                 $attributes = var_export($matches[2], true);
 
-                return "<?= \$this->renderWidget('{$tagName}', {$attributes}); ?>";
+                return "<?= \$this->renderWidgetByName('{$tagName}', {$attributes}); ?>";
             }],
             // Directive <Namespace.Widget></Namespace.Widget>
-            ['/<([A-Z][A-Za-z0-9\.]*)\b([^\/>]*)>(.*?)<\/\1>/s', function ($matches) {
+            ['/<([A-Z][A-Za-z0-9\.]*)\b((?>"[^"]*"|[^\/>"]*)*)>(.*?)<\/\1>/s', function ($matches) {
                 $tagName = $matches[1];
                 // var_export handles escaping single quotes and wrapping the string perfectly
                 $attributes = var_export($matches[2], true);
                 $content = $matches[3];
 
-                return "<?php ob_start(); ?>{$content}<?= \$this->renderWidget('{$tagName}', {$attributes}, ob_get_clean()); ?>";
+                return "<?php \$this->pushWidget('{$tagName}', {$attributes}); ob_start(); ?>{$content}<?= \$this->renderWidget(ob_get_clean()); \$this->popWidget(); ?>";
             },],
         ];
     }
@@ -78,6 +82,7 @@ class ViewCompiler
     {
         $this->layout = null;
         $this->layoutData = [];
+        $this->data = $data;
 
         // Remove escaped dots
         $view = str_replace('\.', '--*--', $view);
@@ -159,16 +164,37 @@ class ViewCompiler
         ]));
     }
 
-    protected function renderWidget(string $widget, string $params = '', $content = ''): string
-    {
+    public function pushWidget($widget, string $params = '') {
         if (!empty($params)) {
             $params = stripcslashes($params);
+            $params = preg_replace('/:([-\w]+)\s*=\s*"([^"]+)"/', '"$1" => $2,', $params);
             $params = preg_replace('/([-\w]+)\s*=\s*"([^"]+)"/', '"$1" => "$2",', $params);
+
+            extract($this->data);
 
             eval('$params = [' . $params . '];');
         } else {
             $params = [];
         }
-        return Application::get()->widgets->render($widget, $params, $content);
+        $widget = app()->widgets->get($widget, $params);
+        app()->widgets->begin($widget);
+        array_push($this->widgets, $widget);
+    }
+
+    protected function renderWidget($content = ''): string
+    {
+        return app()->widgets->render(end($this->widgets), [], $content);
+    }
+
+    protected function renderWidgetByName($name, $params) {
+        $this->pushWidget($name, $params);
+        $result = $this->renderWidget();
+        $this->popWidget();
+
+        return $result;
+    }
+
+    protected function popWidget() {
+        app()->widgets->end(array_pop($this->widgets));
     }
 }

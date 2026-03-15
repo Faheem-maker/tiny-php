@@ -8,7 +8,7 @@ class Row extends Widget {
     public int $cols = 2;
     public int $cols_md = 4;
 
-    public function run() {
+    public function run($ctx) {
         return $this->renderPartial('row', [
             'content' => $this->content,
             'cols' => $this->cols,

@@ -3,20 +3,18 @@
 namespace framework\web\components;
 
 use framework\Application;
+use framework\blaze\interfaces\RootContext;
 use framework\web\interfaces\Component;
 use framework\web\widgets\Widget;
 
 class WidgetManager extends Component{
-    /**
-     * Renders a widget and returns its
-     * HTML representation as string.
-     * Automatically registers any required
-     * assets
-     * 
-     * @param string $widget Name of the widget
-     * @return string Rendered widget
-     */
-    public function render($widget, $params, $content) {
+    protected RootContext $ctx;
+
+    public function __construct() {
+        $this->ctx = new RootContext();
+    }
+
+    public function get($widget, $params) {
         $segs = explode('.', $widget);
 
         $cls = $this->path($segs);
@@ -33,14 +31,41 @@ class WidgetManager extends Component{
             $obj->$param = $value;
         }
 
-        if (!empty($content)) {
-            $obj->content = $content;
-        }
-
         // Register Assets
         $this->registerAssets($obj);
 
+        return $obj;
+    }
+
+    public function begin($widget) {
+        $widget->begin($this->ctx);
+    }
+
+    /**
+     * Renders a widget and returns its
+     * HTML representation as string.
+     * Automatically registers any required
+     * assets
+     * 
+     * @param string $widget Name of the widget
+     * @return string Rendered widget
+     */
+    public function render($widget, $params, $content) {
+        if ($widget instanceof Widget) {
+            $widget->content = $content;
+            return $widget->run($this->ctx);
+        }
+        if (!empty($content)) {
+            $params['content'] = $content;
+        }
+
+        $obj = $this->get($widget, $params);
+
         return $obj->run();
+    }
+
+    public function end($widget) {
+        $widget->end($this->ctx);
     }
 
     protected function registerAssets(Widget $widget): void {

@@ -13,7 +13,7 @@ class PillButton extends Widget {
         'primary' => 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200',
     ];
 
-    public function run()
+    public function run($ctx)
     {
         return $this->renderPartial('button', [
             'content' => $this->content,

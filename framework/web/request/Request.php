@@ -27,7 +27,10 @@ class Request {
      * @param mixed $default The default value to return if the key is not set.
      * @return mixed The value from $_POST if set, otherwise the default value.
      */
-    public function post(string $key, $default = null) {
+    public function post(string $key = '', $default = null) {
+        if ($key === '') {
+            return $_POST;
+        }
         return $_POST[$key] ?? $default;
     }
 
