@@ -1,42 +1,57 @@
-# TinyPHP Framework
+# Tiny PHP Framework
 
-TinyPHP is a minimalist, reactive PHP framework designed for rapid prototyping of small and medium-sized applications. It combines a simple internal routing system with an installable widget pack architecture and a powerful, reactive JavaScript frontend.
+![GitHub stars](https://img.shields.io/github/stars/faheem-maker/tiny-php?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/faheem-maker/tiny-php?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/faheem-maker/tiny-php?style=flat-square)
+![License](https://img.shields.io/github/license/faheem-maker/tiny-php?style=flat-square)
 
-## Key Features
+**Tiny PHP** is a lightweight, high-performance PHP framework engineered for **rapid prototyping** and **model-driven development**. It strips away the bloat of enterprise frameworks, allowing developers to move from concept to a functional MVP in hours, not days.
 
-- **Rapid Prototyping**: Build functional prototypes in hours, not days.
-- **Widget Packs**: Installable, reusable UI components with automatic asset management.
-- **Reactive Framework**: A built-in JavaScript engine for real-time, data-driven interfaces without complex setups.
-- **Blade-like Templates**: Clean, intuitive view syntax for PHP developers.
-- **Minimalistic**: Low overhead and easy to understand codebase.
-
-## Project Structure
-
-```text
-src/
-├── app/
-│   ├── assets/          # Views, Widgets, JS, CSS
-│   ├── config/          # Application configuration
-│   ├── http/            # Controllers
-│   └── runtime/         # Cached views and logs
-├── framework/           # Core framework logic
-├── includes/            # Autoloading and global helpers
-├── public/              # Publicly accessible assets
-└── index.php            # Entry point
-```
-
-## Documentation
-
-- [Getting Started](docs/getting-started.md)
-- [Routing](docs/routing.md)
-- [Controllers](docs/controllers.md)
-- [Views & Templating](docs/views.md)
-- [Widget System](docs/widgets.md)
-- [Reactive JavaScript (TinyJS)](docs/reactivity.md)
-
-## Example Application
-
-The `tiny-tools` implementation included in this repository serves as a live demonstration of TinyPHP's capabilities, featuring a real-time Word Counter and other utility tools.
+[**Explore the Docs »**](https://faheemanis.rf.gd/projects/tiny-php)
 
 ---
-*Note: TinyPHP is currently under implementation. Features demonstrated cover approximately 90% of the planned surface.*
+
+## 🚀 Why Tiny PHP?
+
+In a world of over-engineered solutions, Tiny PHP focuses on the essentials. It is built for developers who prioritize speed of delivery without sacrificing code maintainability.
+
+* **Model-Driven Architecture:** Define your data structures and let the framework handle the heavy lifting.
+* **Pre-Bulit Widgets:** Use powerful tailwind widgets to write beautiful, responsive applications.
+* **Minimal Footprint:** Optimized for speed with nearly zero overhead, making it ideal for microservices and prototypes.
+* **Built-in Reactivity:** Generate interactive applications with a built-in reactive engine.
+
+---
+
+## 🛠️ Getting Started
+
+### Prerequisites
+* PHP 8.2 or higher
+* Git
+* MySQL, PostgreSQL, or SQLite
+
+### Installation
+
+You can create a new Tiny PHP by cloning it via git:
+
+```bash
+git clone https://github.com/Faheem-maker/tiny-php.git
+cd tiny-php
+php -S localhost:8000
+```
+
+### 📖 Documentation
+Full documentation is available at [faheemanis.rf.gd/projects/tiny-php](https://faheemanis.rf.gd/projects/tiny-php).
+
+### 🤝 Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### 📄 License
+Distributed under the MIT License. See LICENSE for more information.
+
+Developed with ❤️ by the Tiny PHP Team.
