@@ -8,7 +8,7 @@ class TextArea extends Widget {
     public $id = null;
     public $data_bind = null;
 
-    public function run()
+    public function run($ctx)
     {
         return $this->renderPartial('textarea', [
             'attrs' => $this->attributes([

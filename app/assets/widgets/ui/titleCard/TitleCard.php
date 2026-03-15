@@ -10,7 +10,7 @@ class TitleCard extends Widget{
     public $data_text = '';
     public $text = '';
 
-    public function run() {
+    public function run($ctx) {
         return $this->renderPartial('title_card', [
             'color' => $this->color,
             'title' => $this->title,

@@ -7,7 +7,7 @@ use framework\web\widgets\Widget;
 class Flex extends Widget {
     public $justify = 'start';
 
-    public function run() {
+    public function run($ctx) {
         return $this->renderPartial('flex', [
             'content' => $this->content,
             'justify' => 'justify-' . $this->justify,

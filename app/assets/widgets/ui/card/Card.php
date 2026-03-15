@@ -13,7 +13,7 @@ class Card extends Widget {
     public $data_scope;
     public $data_controller;
     
-    public function run() {
+    public function run($ctx) {
         return $this->renderPartial('card', [
             'content' => $this->content,
             'attrs' => $this->attributes([

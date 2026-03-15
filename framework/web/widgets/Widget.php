@@ -2,6 +2,8 @@
 
 namespace framework\web\widgets;
 
+use framework\blaze\interfaces\RootContext;
+
 abstract class Widget {
     public function props() {}
 
@@ -10,7 +12,9 @@ abstract class Widget {
 
     public $content;
 
-    public abstract function run();
+    public function begin(RootContext $ctx) {}
+    public abstract function run(RootContext $ctx);
+    public function end(RootContext $ctx) {}
 
     /**
      * Helper Methods
