@@ -17,4 +17,5 @@ abstract class BaseDriver
     public abstract function disconnect(): void;
     public abstract function compile(string $type, array $components): string;
     public abstract function execute(string $sql, array $params = []): QueryResult;
+    public abstract function lastInsertId(): int;
 }
