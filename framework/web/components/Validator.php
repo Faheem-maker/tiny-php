@@ -31,7 +31,7 @@ class Validator extends Component {
                         $errors[$field] = $validator->message();
                         break;
                     }
-                } elseif (isset($this->registry[$validator])) {
+                } elseif (is_string($validator) && isset($this->registry[$validator])) {
                     $validatorClass = $this->registry[$validator];
                     $validatorInstance = new $validatorClass();
                     if (!$validatorInstance->validate($data->$field ?? null)) {
