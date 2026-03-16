@@ -8,9 +8,47 @@ use framework\web\models\attributes\PrimaryKey;
 use framework\web\models\Model;
 
 class ActiveModel extends Model {
+    protected $relations = [];
+
+    public function &__get($name)
+    {
+        if (!empty($this->relations[$name])) {
+            return $this->relations[$name]['records'];
+        }
+        else if (method_exists($this, 'get_' . $name)) {
+            $method = 'get_' . $name;
+            $relation = $this->$method();
+
+            $this->relations[$name] = [
+                'relation' => $relation,
+                'records' => $relation->get()
+            ];
+
+            return $this->relations[$name]['records'];
+        }
+
+        return $tmp = null;
+    }
+
+    public function __set($name, $value)
+    {
+        if (empty($this->relations[$name])) {
+            $method = 'get_' . $name;
+            $relation = $this->$method();
+            $this->relations[$name] = [
+                'records' => $value,
+                'relation' => $relation
+            ];
+        }
+        else if ($this->relations[$name]) {
+            $this->relations[$name]['records'] = $value;
+        }
+    }
+
     public static function table() {
         return strtolower((new \ReflectionClass(static::class))->getShortName()) . 's';
     }
+
     public static function primaryKey() {
         $data = static::getMetaData();
 
@@ -92,6 +130,21 @@ class ActiveModel extends Model {
                 ->where(static::primaryKey(), $data[static::primaryKey()])
                 ->execute();
         }
+
+        if ($recursive) {
+            foreach ($this->relations as $key => $relation) {
+                if (!is_array($relation)) {
+                    $relation = [$relation];
+                }
+                foreach ($relation['records'] as $related) {
+                    $self_key = $relation['relation']->self_key;
+                    $foreign_key = $relation['relation']->foreign_key;
+
+                    $related->$foreign_key = $this->$self_key;
+                    $related->save(true);
+                }
+            }
+        }
     }
 
     protected static function columns() {
@@ -103,5 +156,59 @@ class ActiveModel extends Model {
         }
 
         return $columns;
+    }
+
+    /**
+     * Relationships
+     */
+    public function belongsTo($model, $self_key = null, $foreign_key = null) {
+        if (empty($foreign_key)) {
+            $foreign_key = $model::primaryKey();
+        }
+        if (empty($self_key)) {
+            $self_key = $model::table() . '_id';
+        }
+
+        return new Relation(
+            $this,
+            $model,
+            false,
+            $self_key,
+            $foreign_key
+        );
+    }
+
+    public function hasOne($model, $foreign_key = null, $self_key = null) {
+        if (empty($self_key)) {
+            $self_key = $this->primaryKey();
+        }
+        if (empty($foreign_key)) {
+            $foreign_key = $this->table() . '_id';
+        }
+
+        return new Relation(
+            $this,
+            $model,
+            false,
+            $self_key,
+            $foreign_key
+        );
+    }
+
+    public function hasMany($model, $foreign_key = null, $self_key = null) {
+        if (empty($self_key)) {
+            $self_key = $this->primaryKey();
+        }
+        if (empty($foreign_key)) {
+            $foreign_key = substr($this->table(), 0, -1) . '_id';
+        }
+
+        return new Relation(
+            $this,
+            $model,
+            true,
+            $self_key,
+            $foreign_key
+        );
     }
 }
