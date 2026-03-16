@@ -27,6 +27,7 @@ class Response {
      * @param string $url
      */
     public function redirect($url) {
+        $url = app()->url->to($url);
         header("Location: $url");
         exit;
     }

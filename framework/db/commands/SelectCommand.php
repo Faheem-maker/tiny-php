@@ -11,6 +11,7 @@ class SelectCommand extends BaseCommand
 {
     protected array $cols;
     protected array $params = [];
+    public $transform = null;
 
     use HasTable;
     use HasWhere;
@@ -37,17 +38,26 @@ class SelectCommand extends BaseCommand
         ]);
     }
 
+    protected function transform($data) {
+        if (is_callable($this->transform)) {
+            return array_map($this->transform, $data);
+        }
+
+        return $data;
+
+    }
+
     public function all()
     {
         $sql = $this->compile();
 
-        return $this->conn->execute($sql, $this->params)->fetchAll();
+        return $this->transform($this->conn->execute($sql, $this->params)->fetchAll());
     }
 
     public function first()
     {
         $sql = $this->compile();
-        return $this->conn->execute($sql, $this->params)->fetch();
+        return $this->transform($this->conn->execute($sql, $this->params)->fetch());
     }
 
     public function count()

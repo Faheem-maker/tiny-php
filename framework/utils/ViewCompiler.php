@@ -45,6 +45,9 @@ class ViewCompiler
             // Directive: @if ... @endif
             ['/@if\s*\((.*?)\)/', '<?php if($1): ?>'],
             ['/@endif/', '<?php endif; ?>'],
+            // Directive: @foreach ... @endforeach
+            ['/@foreach\s*\((.*?)\)/', '<?php foreach($1): ?>'],
+            ['/@endforeach/', '<?php endforeach; ?>'],
             // Directive: @{ ... } (PHP code)
             ['/@\{([^{}]+)\}/s', '<?php $1 ?>'],
             // Directive: {{!! ... }} (Unsafe echo)
