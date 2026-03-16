@@ -2,8 +2,6 @@
 
 namespace framework\web\models;
 
-use framework\web\interfaces\Validator;
-
 class Model {
     public $errors = [];
 
@@ -24,11 +22,15 @@ class Model {
         if (is_array($data) && isset($data[$base])) {
             $data = $data[$base];
         }
+        $meta = static::getMetaData();
         $cls = \get_called_class();
         $model = new $cls();
-        foreach ($data as $key => $value) {
-            if (self::hasProperty($key)) {
-                $model->$key = $value;
+        foreach ($meta as $key => $info) {
+            if (empty($data[$key])) continue;
+            if ($info['type'] == 'DateTime') {
+                $model->{$key} = new \DateTime($data[$key]);
+            } else {
+                $model->{$key} = $data[$key] ?? null;
             }
         }
         return $model;
@@ -39,13 +41,21 @@ class Model {
         $reflection = new \ReflectionClass($cls);
         $properties = $reflection->getProperties();
         $metaData = [];
+
         foreach ($properties as $property) {
-            $metaData[$property->getName()] = [
-                'name' => $property->getName(),
-                'type' => (string)$property->getType(),
-                'attributes' => $property->getAttributes()
-            ];
+            // Only proceed if the property was defined in the current class ($cls)
+            if ($property->getDeclaringClass()->getName() === $cls) {
+                $metaData[$property->getName()] = [
+                    'name' => $property->getName(),
+                    'type' => (string)$property->getType(),
+                    'initialized' => function ($instance) use ($property) {
+                        return $property->isInitialized($instance);
+                    },
+                    'attributes' => $property->getAttributes()
+                ];
+            }
         }
+
         return $metaData;
     }
 
