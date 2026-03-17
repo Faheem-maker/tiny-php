@@ -7,7 +7,8 @@ class Route {
 
     public function __construct(
         public string $controller,
-        public string $action
+        public string $action,
+        public string $name
     ){}
 
     public function middleware($middleware) {
@@ -48,5 +49,9 @@ class Route {
         );
 
         return $pipeline();
+    }
+
+    public function rename($to) {
+
     }
 }

@@ -79,4 +79,40 @@ class Routes {
     public static function resolveName($name, $params = []) {
         return static::$namedRoutes[$name];
     }
+
+    public static function resource($prefix, $controller, $config = []) {
+        $resource = $config['resource'] ?? $prefix;
+
+        $routes = [
+            'index' => ['GET', '/'],
+            'create' => ['GET', '/create'],
+            'store' => ['POST', '/'],
+            'show' => ['GET', "/{{$resource}}"],
+            'edit' => ['GET', '/{' . $resource . '}/edit'],
+            'update' => ['PUT', "/{{$resource}}"],
+            'update' => ['PATCH', "/{{$resource}}"],
+            'destroy' => ['DELETE', "/{{$resource}}"],
+        ];
+        
+        if (isset($config['only'])) {
+            $routes = array_map(function ($route) use ($routes) { return $routes[$route]; }, $config['only']);
+        }
+        else if (isset($config['except'])) {
+            foreach ($config['except'] as $except) {
+                unset($routes[$except]);
+            }
+        }
+
+        return Routes::group($prefix, function () use ($routes, $controller) {
+            foreach ($routes as $action => $route) {
+                $method = $route[0];
+                Routes::$method($route[1], [$controller, $action], $action);
+            }
+        })->name($resource);
+    }
+
+    public static function rename($from, $to) {
+        static::$namedRoutes[$to] = static::$namedRoutes[$from];
+        unset(static::$namedRoutes);
+    }
 }

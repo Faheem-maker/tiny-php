@@ -20,4 +20,14 @@ class RouteGroup {
             $route->middleware($middleware);
         }
     }
+
+    public function name($name) {
+        foreach ($this->routes as $route) {
+            $route->rename($name . '.' . $route->name);
+        }
+    }
+
+    public function rename($name) {
+        return $this->name($name);
+    }
 }
