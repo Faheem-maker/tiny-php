@@ -8,6 +8,7 @@ use framework\blaze\interfaces\RootContext;
 
 class HiddenField extends Widget {
     public string $name;
+    public bool $readonly = false;
 
     public function run(RootContext $ctx) {
         $model = $ctx->find(ActiveFormContext::class);
@@ -18,6 +19,7 @@ class HiddenField extends Widget {
         return $this->renderPartial('active-hiddenfield', [
             'model' => $model->model,
             'name' => $this->name,
+            'readonly' => $this->readonly,
         ]);
     }
 }
