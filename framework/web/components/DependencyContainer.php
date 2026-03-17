@@ -8,25 +8,34 @@ use framework\web\interfaces\Component;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionType;
 
-class DependencyContainer extends Component {
+class DependencyContainer extends Component
+{
     private array $instances = [];
     private array $definitions = [];
+    private ?Closure $fallbackHandler = null;
 
     /**
-     * Register a singleton: The same instance is returned every time.
+     * Register a fallback handler for unknown dependencies or type mismatches.
+     * The callback signature: function(string $name, ?string $type)
      */
-    public function singleton(string $id, $concrete = null): void {
+    public function setFallback(callable $handler): void
+    {
+        $this->fallbackHandler = Closure::fromCallable($handler);
+    }
+
+    public function singleton(string $id, $concrete = null): void
+    {
         $this->definitions[$id] = [
             'concrete' => $concrete ?? $id,
             'shared' => true
         ];
     }
 
-    /**
-     * Register a scoped dependency: A new instance/value is returned via factory every time.
-     */
-    public function scoped(string $id, $concrete = null): void {
+    public function scoped(string $id, $concrete = null): void
+    {
         $this->definitions[$id] = [
             'concrete' => $concrete ?? $id,
             'shared' => false
@@ -34,23 +43,30 @@ class DependencyContainer extends Component {
     }
 
     /**
-     * Resolve a dependency.
+     * Resolve a dependency. 
+     * Modified: Removed automated instantiation of unregistered strings.
      */
-    public function get(string $id, array $parameters = []) {
+    public function get(string $id, array $parameters = [])
+    {
         if (isset($this->instances[$id])) {
             return $this->instances[$id];
         }
 
-        $definition = $this->definitions[$id] ?? ['concrete' => $id, 'shared' => false];
+        // Only proceed if the ID is explicitly registered
+        if (!isset($this->definitions[$id])) {
+            return null;
+        }
+
+        $definition = $this->definitions[$id];
         $concrete = $definition['concrete'];
 
-        // If the concrete is a closure, treat it as a factory
         if ($concrete instanceof Closure) {
             $object = $concrete($this, ...$parameters);
         } elseif (is_string($concrete) && class_exists($concrete)) {
+            // Note: We still allow 'make' here because it's the registered concrete, 
+            // but the container no longer "guesses" classes in the fallback.
             $object = $this->make($concrete, $parameters);
         } else {
-            // Static value
             $object = $concrete;
         }
 
@@ -61,10 +77,8 @@ class DependencyContainer extends Component {
         return $object;
     }
 
-    /**
-     * Instantiate a class using reflection to auto-wire dependencies.
-     */
-    public function make(string $className, array $parameters = []) {
+    public function make(string $className, array $parameters = [])
+    {
         $reflection = new ReflectionClass($className);
 
         if (!$reflection->isInstantiable()) {
@@ -72,58 +86,98 @@ class DependencyContainer extends Component {
         }
 
         $constructor = $reflection->getConstructor();
-
         if (is_null($constructor)) {
             return new $className;
         }
 
         $dependencies = $this->resolveDependencies($constructor, $parameters);
-
         return $reflection->newInstanceArgs($dependencies);
     }
 
-    /**
-     * Invoke a method on an object with auto-wired dependencies.
-     */
-    public function invoke(object $instance, string $method, array $parameters = []) {
+    public function invoke(object $instance, string $method, array $parameters = [])
+    {
         $reflectionMethod = new ReflectionMethod($instance, $method);
         $dependencies = $this->resolveDependencies($reflectionMethod, $parameters);
-
         return $reflectionMethod->invokeArgs($instance, $dependencies);
     }
 
     /**
-     * The heart of the container: maps parameters to types and resolves them.
+     * The heart of the container.
+     * Modified: Logic updated for explicit resolution and fallback handler.
      */
-    private function resolveDependencies(ReflectionFunctionAbstract $method, array $parameters): array {
+    private function resolveDependencies(ReflectionFunctionAbstract $method, array $parameters): array
+    {
         $resolved = [];
 
         foreach ($method->getParameters() as $parameter) {
             $name = $parameter->getName();
             $type = $parameter->getType();
+            $typeName = ($type instanceof ReflectionNamedType) ? $type->getName() : null;
 
-            // 1. Priority: Manual parameter override
+            // 1. Manual parameter check WITH Type Validation
             if (array_key_exists($name, $parameters)) {
-                $resolved[] = $parameters[$name];
-                continue;
+                $providedValue = $parameters[$name];
+
+                if ($this->isValidType($providedValue, $type)) {
+                    $resolved[] = $providedValue;
+                    continue;
+                }
+                // If type doesn't match, we DON'T continue. 
+                // We allow the Fallback Handler a chance to "convert" it.
             }
 
-            // 2. Resolve via Class/Interface type hint
-            if ($type && !$type->isBuiltin()) {
-                $resolved[] = $this->get($type->getName());
-                continue;
+            // 2. Resolve via Class/Interface type hint (Explicit only)
+            if ($typeName && !$type->isBuiltin()) {
+                $instance = $this->get($typeName);
+                if ($instance !== null) {
+                    $resolved[] = $instance;
+                    continue;
+                }
             }
 
-            // 3. Fallback to default value if available
+            // 3. Fallback Handler (Your logic for "User $user" goes here)
+            // We pass the provided parameters so the fallback knows the context (like an ID)
+            if ($this->fallbackHandler) {
+                $fallbackValue = ($this->fallbackHandler)($name, $typeName, $parameters);
+                if ($fallbackValue !== null) {
+                    // Final sanity check: Does the fallback return what the type hint requires?
+                    if ($this->isValidType($fallbackValue, $type)) {
+                        $resolved[] = $fallbackValue;
+                        continue;
+                    }
+                }
+            }
+
+            // 4. Fallback to default value
             if ($parameter->isDefaultValueAvailable()) {
                 $resolved[] = $parameter->getDefaultValue();
                 continue;
             }
 
-            // 4. Fail if scalar with no value provided
-            throw new Exception("Cannot resolve parameter '{$name}' for {$method->getName()}. No value or type-hint provided.");
+            throw new Exception("Cannot resolve parameter '{$name}' of type '{$typeName}' for {$method->getName()}.");
         }
 
         return $resolved;
+    }
+
+    /**
+     * Helper to check if a value matches a ReflectionType
+     */
+    private function isValidType($value, ?ReflectionType $type): bool
+    {
+        if ($type === null) return true;
+        if ($type->allowsNull() && $value === null) return true;
+
+        if ($type instanceof ReflectionNamedType) {
+            $typeName = $type->getName();
+            if ($type->isBuiltin()) {
+                $gettype = gettype($value);
+                $map = ['integer' => 'int', 'boolean' => 'bool', 'double' => 'float'];
+                $currentType = $map[$gettype] ?? $gettype;
+                return $currentType === $typeName;
+            }
+            return $value instanceof $typeName;
+        }
+        return true;
     }
 }
