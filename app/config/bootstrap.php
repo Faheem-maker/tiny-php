@@ -23,3 +23,6 @@ foreach (DirectoryHelper::listFiles(__DIR__, 'bootstrap.php') as $file) {
         app()->config->set(pathinfo($file, PATHINFO_FILENAME), $res);
     }
 }
+
+// Load routes
+require_once __DIR__ . DS . 'routes' . DS . 'web.php';
