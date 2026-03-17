@@ -11,4 +11,4 @@ $app = Application::getInstance($route);
 
 require_once __DIR__ . '/app/config/bootstrap.php';
 
-$app->run($_SERVER['REQUEST_METHOD']);
+$app->run($_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD']);
