@@ -10,8 +10,6 @@ use framework\web\components\Config;
 use framework\utils\helpers\DirectoryHelper;
 use framework\utils\helpers\DotenvHelper;
 
-require_once __DIR__ . '/routes.php';
-
 // Load dotenv
 DotenvHelper::load(__DIR__ . '/../../.env');
 
