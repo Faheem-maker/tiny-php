@@ -4,6 +4,7 @@ namespace framework\web\components;
 
 use framework\Application;
 use framework\web\interfaces\Component;
+use framework\web\Routes;
 
 /**
  * URL Manager
@@ -49,7 +50,7 @@ class UrlManager extends Component
      */
     public function full(): string
     {
-        // TODO: Implement
+        return $this->join($this->base(), $this->currentPath);
     }
 
     /**
@@ -156,7 +157,7 @@ class UrlManager extends Component
      */
     protected function ensureLeadingSlash(string $path): string
     {
-        // TODO: Implement
+        return rtrim($path, '/') . '/';
     }
 
     /**
@@ -197,6 +198,10 @@ class UrlManager extends Component
             return $path;
         }
         return $this->base() . '/' . trim($path, '/') . ($query ? '?' . http_build_query($query) : '');
+    }
+
+    public function named(string $name) {
+        return $this->to(Routes::resolveName($name));
     }
 
     /**
