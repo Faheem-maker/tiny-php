@@ -172,6 +172,7 @@ class ViewCompiler
             $params = stripcslashes($params);
             $params = preg_replace('/:([-\w]+)\s*=\s*"([^"]+)"/', '"$1" => $2,', $params);
             $params = preg_replace('/([-\w]+)\s*=\s*"([^"]+)"/', '"$1" => "$2",', $params);
+            $params = preg_replace('/:([-\w]+)\b/', '"$1" => true,', $params);
 
             extract($this->data);
 
