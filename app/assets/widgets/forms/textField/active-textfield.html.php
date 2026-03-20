@@ -9,7 +9,8 @@
     {{ $model->errors($name) ? ' border-red-500' : '' }}"
     name="{{ $model->basename() }}[{{ $name }}]"
     id="{{ $model->basename() }}_{{ $name }}"
-    type="text">
+    type="text"
+    {{ $readonly ? 'readonly' : ''}}>
 <div class="text-red-500 text-xs italic mb-2">
     {{ $model->errors($name) }}
 </div>
