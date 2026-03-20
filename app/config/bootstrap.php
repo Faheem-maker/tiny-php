@@ -11,8 +11,6 @@ use framework\utils\helpers\DirectoryHelper;
 use framework\utils\helpers\DotenvHelper;
 use framework\web\Routes;
 
-session_start();
-
 // Load dotenv
 DotenvHelper::load(__DIR__ . '/../../.env');
 
