@@ -78,6 +78,21 @@ class ViewCompiler
         ];
     }
 
+    public function exists($view) {
+        // Remove escaped dots
+        $view = str_replace('\.', '--*--', $view);
+
+        // Convert dots to spaces
+        $view = str_replace('.', '/', $view);
+
+        // Convert escaped dots
+        $view = str_replace('--*--', '.', $view);
+
+        $templatePath = $this->templateDir . '/' . $view . '.html.php';
+
+        return file_exists($templatePath);
+    }
+
     /**
      * Renders the view.
      */

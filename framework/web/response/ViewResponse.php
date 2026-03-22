@@ -15,8 +15,8 @@ class ViewResponse extends HttpResponse {
         $this->data = $params;
     }
 
-    public function render() {
-        $path = Application::get()->path;
+    protected function compiler() {
+        $path = app()->path;
         
         if (str_starts_with($this->path, '@')) {
             $base = explode('.', $this->path);
@@ -27,12 +27,22 @@ class ViewResponse extends HttpResponse {
             $dir = $path->resolve('@views/');
         }
 
-        $compiler = new ViewCompiler(
+        return new ViewCompiler(
             $dir,
             $path->resolve('@runtime/views')
             );
+    }
+
+    public function render() {
+        $compiler = $this->compiler();
 
         $compiler->render($this->path, $this->data);
+    }
+
+    public function exists() {
+        $compiler = $this->compiler();
+
+        return $compiler->exists($this->path);
     }
 
     public function with($key, $value) {
