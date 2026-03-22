@@ -58,3 +58,7 @@ function env($key, $default = null)
     }
     return $_ENV[$key] ?? $default;
 }
+
+function logs() {
+    return app()->logger;
+}
