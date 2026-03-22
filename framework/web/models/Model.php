@@ -68,7 +68,6 @@ class Model {
 
     public function validate() {
         $metaData = self::getMetaData();
-        $valid = true;
         $rules = self::rules();
 
         foreach ($metaData as $property => $data) {
@@ -87,6 +86,10 @@ class Model {
             return $this->errors[$name] ?? '';
         }
         return $this->errors;
+    }
+
+    public function error($name, $message) {
+        $this->errors[$name] = $message;
     }
 
     public static function label($property) {
