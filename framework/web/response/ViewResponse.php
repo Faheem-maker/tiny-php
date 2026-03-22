@@ -34,4 +34,10 @@ class ViewResponse extends HttpResponse {
 
         $compiler->render($this->path, $this->data);
     }
+
+    public function with($key, $value) {
+        $this->data[$key] = $value;
+
+        return $this;
+    }
 }

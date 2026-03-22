@@ -81,11 +81,7 @@ class UrlManager extends Component
      */
     public function base(): string
     {
-        $scheme = $this->isSecure() ? 'https' : 'http';
-
-        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
-
-        return $this->join("$scheme://$host", trim($this->baseUrl, '/'));
+        return $this->trimTrailingSlash($this->baseUrl);
     }
 
     public function public(): string {
@@ -201,7 +197,7 @@ class UrlManager extends Component
     }
 
     public function named(string $name) {
-        return $this->to(Routes::resolveName($name));
+        return Routes::resolveName($name)->name;
     }
 
     /**

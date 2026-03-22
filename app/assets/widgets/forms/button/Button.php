@@ -12,6 +12,7 @@ class Button extends Widget {
         'transparent' => 'text-gray-600 hover:bg-gray-100',
         'primary' => 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200',
     ];
+    public string $class_name = '';
 
     public function run($ctx)
     {
@@ -22,6 +23,7 @@ class Button extends Widget {
                 'data-onclick' => $this->data_onclick,
             ]),
             'classes' => $this->variants[$this->variant],
+            'class' => $this->class_name,
         ]);
     }
 }

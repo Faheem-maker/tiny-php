@@ -4,6 +4,7 @@ namespace framework\db;
 
 use framework\db\commands\DeleteCommand;
 use framework\db\commands\SelectCommand;
+use framework\web\interfaces\models\BeforeSave;
 use framework\web\models\attributes\PrimaryKey;
 use framework\web\models\Model;
 
@@ -121,6 +122,17 @@ class ActiveModel extends Model {
 
     public function save($recursive = false) {
         $data = $this->attributes();
+
+        // Run before save
+        $fields = static::getMetaData();
+        foreach ($fields as $name => $field) {
+            foreach ($field['attributes'] as $attribute) {
+                $instance = $attribute->newInstance();
+                if ($instance instanceof BeforeSave) {
+                    $instance->beforeSave($data[$name], $this);
+                }
+            }
+        }
 
         if (empty($data[static::primaryKey()])) {
             db()->insert(static::table(), $data);

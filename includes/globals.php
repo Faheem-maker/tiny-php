@@ -20,7 +20,18 @@ function request()
 
 function view()
 {
-    return response()->view(...func_get_args());
+    $args = func_get_args();
+    if (empty($args)) {
+        // Find the controller/view automatically
+        $trace = debug_backtrace();
+        $cls = explode('\\', $trace[1]['class']);
+        $cls = end($cls);
+        $cls = strtolower(str_replace('Controller', '', $cls));
+        $method = $trace[1]['function'];
+
+        $args[0] = "$cls.$method";
+    }
+    return response()->view(...$args);
 }
 
 /**

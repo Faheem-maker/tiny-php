@@ -25,6 +25,9 @@ class Validator extends Component {
     public function validate($data, $rules) {
         $errors = [];
         foreach ($rules as $field => $validators) {
+            if (is_string($validators)) {
+                $validators = explode('|', $validators);
+            }
             foreach ($validators as $validator) {
                 if ($validator instanceof \framework\web\interfaces\Validator) {
                     if (!$validator->validate($data->$field ?? null)) {
