@@ -2,7 +2,9 @@
 
 namespace app\http\controllers;
 
+use app\http\models\LoginModel;
 use app\http\models\User;
+use app\http\services\AuthService;
 use framework\web\request\Request;
 
 class AuthController {
@@ -25,24 +27,25 @@ class AuthController {
     }
 
     public function login() {
-        return view();
+        return view()->with('model', new LoginModel());
     }
 
-    public function validate(Request $request) {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+    public function authenticate(Request $request) {
+        $model = LoginModel::from($request->post());
 
-        $user = User::find($request->post('email'), 'email');
-
-        if (password_verify($request->post('password'), $user->password)) {
-            app()->session->set('user', $user->id);
-            return response()->redirect('/');
+        if (!$model->validate()) {
+            return view('auth.login', [
+                'model' => $model,
+            ]);
         }
-        return view('auth.login', [
-            'user' => $user,
-        ]);
+
+        if (!AuthService::authenticate($model)) {
+            return view('auth.login', [
+                'model' => $model,
+            ]);
+        }
+
+        return response()->redirect('/');
     }
 
     public function logout() {

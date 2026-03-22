@@ -17,7 +17,7 @@ Routes::group('/auth', function () {
     Routes::get('/register', [AuthController::class, 'register'], 'auth.register');
     Routes::get('/login', [AuthController::class, 'login'], 'auth.login');
     Routes::post('/store', [AuthController::class, 'store'], 'auth.store');
-    Routes::post('/', [AuthController::class, 'validate'], 'auth.validate');
+    Routes::post('/', [AuthController::class, 'authenticate'], 'auth.validate');
     Routes::get('/logout', [AuthController::class, 'logout'])->middleware(Auth::class);
 });
 
