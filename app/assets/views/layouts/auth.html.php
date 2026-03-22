@@ -33,20 +33,6 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
-
-        // Password visibility toggle logic
-        const passwordInput = document.getElementById('password');
-        const toggleButton = document.getElementById('togglePassword');
-        const eyeIcon = document.getElementById('eyeIcon');
-
-        toggleButton.addEventListener('click', () => {
-            const isPassword = passwordInput.getAttribute('type') === 'password';
-            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-            
-            // Update icon
-            eyeIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
-            lucide.createIcons();
-        });
     </script>
 </body>
 </html>
