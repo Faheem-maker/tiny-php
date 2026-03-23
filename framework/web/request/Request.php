@@ -21,6 +21,10 @@ class Request {
         }
     }
 
+    public function path() {
+        return app()->url->path();
+    }
+
     /**
      * Get a value from the $_GET superglobal, with an optional default.
      * 
