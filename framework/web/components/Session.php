@@ -45,7 +45,8 @@ class Session extends Component {
         setcookie(session_name(), '', time() - 3600);
     }
 
-    public function get($key, $default = null) {
+    public function get($key = '', $default = null) {
+        if (empty($key)) return $_SESSION;
         if (!isset($_SESSION[$key])) return $default;
         return $_SESSION[$key];
     }
