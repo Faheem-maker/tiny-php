@@ -46,8 +46,10 @@ class ViewCompiler
             ['/@if\s*\((.*?)\)/', '<?php if($1): ?>'],
             ['/@endif/', '<?php endif; ?>'],
             // Directive: @foreach ... @endforeach
-            ['/@foreach\s*\((.*?)\)/', '<?php foreach($1): ?>'],
+            ['/@foreach\s*\(([^()]*+(?:\(([^()]*+)\)[^()]*)*)\)/', '<?php foreach($1): ?>'],
             ['/@endforeach/', '<?php endforeach; ?>'],
+            ['/@for\s*\(([^()]*+(?:\(([^()]*+)\)[^()]*)*)\)/', '<?php for($1): ?>'],
+            ['/@endfor/', '<?php endfor; ?>'],
             // Directive: @{ ... } (PHP code)
             ['/@\{([^{}]+)\}/s', '<?php $1 ?>'],
             // Directive: {{!! ... }} (Unsafe echo)
