@@ -6,6 +6,8 @@
 
 use framework\web\components\AssetManager;
 use framework\web\components\DependencyContainer;
+use framework\web\components\ErrorHandler;
+use framework\web\components\Logger;
 use framework\web\components\PathManager;
 use framework\web\components\Session;
 use framework\web\components\UrlManager;
@@ -19,6 +21,8 @@ $app->registerComponent('widgets', new WidgetManager());
 $app->registerComponent('di', new DependencyContainer());
 $app->registerComponent('validator', new Validator());
 $app->registerComponent('session', new Session());
+$app->registerComponent('logger', new Logger());
+$app->registerComponent('erorrs', new ErrorHandler());
 
 /**
  * Register Dependencies

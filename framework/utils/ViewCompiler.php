@@ -46,8 +46,10 @@ class ViewCompiler
             ['/@if\s*\((.*?)\)/', '<?php if($1): ?>'],
             ['/@endif/', '<?php endif; ?>'],
             // Directive: @foreach ... @endforeach
-            ['/@foreach\s*\((.*?)\)/', '<?php foreach($1): ?>'],
+            ['/@foreach\s*\(([^()]*+(?:\(([^()]*+)\)[^()]*)*)\)/', '<?php foreach($1): ?>'],
             ['/@endforeach/', '<?php endforeach; ?>'],
+            ['/@for\s*\(([^()]*+(?:\(([^()]*+)\)[^()]*)*)\)/', '<?php for($1): ?>'],
+            ['/@endfor/', '<?php endfor; ?>'],
             // Directive: @{ ... } (PHP code)
             ['/@\{([^{}]+)\}/s', '<?php $1 ?>'],
             // Directive: {{!! ... }} (Unsafe echo)
@@ -76,6 +78,21 @@ class ViewCompiler
                 return "<?php \$this->pushWidget('{$tagName}', {$attributes}); ob_start(); ?>{$content}<?= \$this->renderWidget(ob_get_clean()); \$this->popWidget(); ?>";
             },],
         ];
+    }
+
+    public function exists($view) {
+        // Remove escaped dots
+        $view = str_replace('\.', '--*--', $view);
+
+        // Convert dots to spaces
+        $view = str_replace('.', '/', $view);
+
+        // Convert escaped dots
+        $view = str_replace('--*--', '.', $view);
+
+        $templatePath = $this->templateDir . '/' . $view . '.html.php';
+
+        return file_exists($templatePath);
     }
 
     /**
