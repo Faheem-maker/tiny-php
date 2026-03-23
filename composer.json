@@ -1,0 +1,7 @@
+{
+    "name": "tiny-php/tiny",
+    "description": "A simple, minimal PHP framework for building web applications.",
+    "require": {
+        "php": ">=8.0"
+    }
+}
