@@ -26,7 +26,13 @@ class ErrorHandler extends Component {
                     return;
                 }
             }
-            var_dump($ex);
+            
+            if (env('ENVIRONMENT', 'PRODUCTION') == 'DEBUG') {
+                echo view('errors.500_dev', compact('ex'))->render();
+            }
+            else {
+                echo view('errors.500_dev', compact('ex'))->render();
+            }
         });
     }
 }
