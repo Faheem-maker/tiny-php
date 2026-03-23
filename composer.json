@@ -1,6 +1,20 @@
 {
     "name": "tiny-php/tiny",
+    "type": "framework",
+    "keywords": [
+        "php",
+        "framework"
+    ],
     "description": "A simple, minimal PHP framework for building web applications.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Faheem Anis",
+            "email": "faheem@cartzlink.com",
+            "homepage": "https://faheemanis.rf.gd/",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=8.0"
     }
