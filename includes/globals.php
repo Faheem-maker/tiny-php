@@ -62,3 +62,7 @@ function env($key, $default = null)
 function logs() {
     return app()->logger;
 }
+
+function session() {
+    return app()->session;
+}
