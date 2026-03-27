@@ -27,4 +27,3 @@ Routes::group('/auth', function () {
  * Example:
  * Routes::get('/', 'HomeController@index');
  */
-Routes::resource('/', HomeController::class);
