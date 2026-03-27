@@ -1,14 +1,15 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/autoload.php';
-
-use framework\Application;
 
 $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $route = '/' . trim($route, '/');
 
-$app = Application::getInstance($route);
+$method = $_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
-require_once __DIR__ . '/app/config/bootstrap.php';
+$app = require_once __DIR__ . '/bootstrap/bootstrap.php';
 
-$app->run($_REQUEST['_method'] ?? $_SERVER['REQUEST_METHOD']);
+$app->init();
+
+$app->run();
