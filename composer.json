@@ -1,11 +1,11 @@
 {
-    "name": "tinyframework/tiny",
+    "name": "tinyframework/web",
     "type": "framework",
     "keywords": [
         "php",
         "framework"
     ],
-    "description": "A simple, minimal PHP framework for building web applications.",
+    "description": "Web skeleton / structure for Tiny PHP application",
     "license": "MIT",
     "authors": [
         {
@@ -15,7 +15,14 @@
             "role": "Developer"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.0",
+        "tinyframework/contracts": "^1.0.0",
+        "tinyframework/core": "dev-main"
     }
 }
