@@ -1,8 +1,8 @@
 <?php
 
-use framework\Application;
+use framework\web\WebApplication;
 
-$app = Application::getInstance($route, $method);
+$app = WebApplication::getInstance($route, $method);
 
 // Load all bootstrap files
 require_once __DIR__ . '/di.php';

@@ -27,3 +27,6 @@ Routes::group('/auth', function () {
  * Example:
  * Routes::get('/', 'HomeController@index');
  */
+Routes::get('/', function () {
+    echo 'Hi';
+});

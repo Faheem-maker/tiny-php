@@ -2,15 +2,15 @@
 
 use app\components\DependencyContainer;
 use framework\Application;
-use framework\routing\Router;
+use framework\web\routing\Router;
 use framework\web\components\AssetManager;
 use framework\web\components\ErrorHandler;
 use framework\web\components\Logger;
-use framework\web\components\PathManager;
 use framework\web\components\Session;
 use framework\web\components\UrlManager;
-use framework\web\components\Validator;
 use framework\web\components\WidgetManager;
+use framework\components\PathManager;
+use framework\components\Validator;
 
 /**
  * This file attaches all core components required for the app to function.
