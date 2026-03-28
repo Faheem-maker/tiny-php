@@ -4,7 +4,7 @@ namespace app\components;
 
 use Closure;
 use Exception;
-use framework\web\Component;
+use framework\Component;
 use ReflectionClass;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;

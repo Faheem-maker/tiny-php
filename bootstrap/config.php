@@ -8,7 +8,7 @@ use framework\Application;
  * 
  * @var Application $app
  */
-use framework\web\components\Config;
+use framework\components\Config;
 use framework\utils\helpers\DirectoryHelper;
 use framework\utils\helpers\DotenvHelper;
 
