@@ -3,14 +3,12 @@ public/assets/**
 
 .env
 
-# Test Application
-app/http/controllers/**
-app/assets/js/**
-app/assets/views/**
-
 # Composer dependencies
 /vendor/
 /composer.lock
+
+# Storage Files
+/app/storage/
 
 # PHPStorm and other IDEs
 idea/
