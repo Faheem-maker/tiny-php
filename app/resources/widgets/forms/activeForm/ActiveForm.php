@@ -2,7 +2,7 @@
 
 namespace app\resources\widgets\forms\activeForm;
 
-use framework\blaze\interfaces\RootContext;
+use framework\web\blaze\interfaces\RootContext;
 use framework\web\models\Model;
 use framework\web\widgets\Widget;
 

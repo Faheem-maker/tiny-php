@@ -2,6 +2,7 @@
 
 use app\components\DependencyContainer;
 use framework\Application;
+use framework\components\FileSystem;
 use framework\web\routing\Router;
 use framework\web\components\AssetManager;
 use framework\web\components\ErrorHandler;
@@ -28,3 +29,4 @@ $app->registerComponent('url', UrlManager::class);
 $app->registerComponent('validator', Validator::class);
 $app->registerComponent('widgets', WidgetManager::class);
 $app->registerComponent('router', Router::class);
+$app->registerComponent('fs', FileSystem::class);
