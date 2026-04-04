@@ -5,6 +5,7 @@ $base_dir = realpath(dirname(__DIR__, 2));
 
 return [
     'base_dir' => $base_dir,
+    'app' => $base_dir . DS . 'app',
     'assets' => $base_dir . DS . 'app' . DS . 'resources',
     'resources' => $base_dir . DS . 'app' . DS . 'resources',
     'storage' => $base_dir . DS . 'app' . DS . 'storage',

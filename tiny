@@ -1,0 +1,10 @@
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/includes/autoload.php';
+
+$app = require_once __DIR__ . '/cli/bootstrap.php';
+
+$app->init();
+
+$app->run();
