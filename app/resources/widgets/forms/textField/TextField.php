@@ -4,7 +4,7 @@ namespace app\resources\widgets\forms\textField;
 
 use framework\web\widgets\Widget;
 use app\resources\widgets\forms\activeForm\ActiveFormContext;
-use framework\blaze\interfaces\RootContext;
+use framework\web\blaze\interfaces\RootContext;
 
 class TextField extends Widget
 {

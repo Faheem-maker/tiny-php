@@ -3,7 +3,7 @@
 namespace app\resources\widgets\forms\activeForm;
 
 use framework\web\blaze\interfaces\RootContext;
-use framework\web\models\Model;
+use framework\models\Model;
 use framework\web\widgets\Widget;
 
 class ActiveForm extends Widget
