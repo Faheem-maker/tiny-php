@@ -2,7 +2,7 @@
 
 namespace app\resources\widgets\tables\table;
 
-use framework\blaze\interfaces\RootContext;
+use framework\web\blaze\interfaces\RootContext;
 use framework\web\widgets\Widget;
 
 class Table extends Widget

@@ -2,7 +2,7 @@
 
 namespace app\resources\widgets\tables\row;
 
-use framework\blaze\interfaces\RootContext;
+use framework\web\blaze\interfaces\RootContext;
 use framework\web\widgets\Widget;
 
 class Row extends Widget
