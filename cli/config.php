@@ -13,7 +13,9 @@ use framework\utils\helpers\DirectoryHelper;
 use framework\utils\helpers\DotenvHelper;
 
 // Load dotenv
-DotenvHelper::load(__DIR__ . '/../.env');
+if (file_exists(__DIR__ . '/../.env')) {
+    DotenvHelper::load(__DIR__ . '/../.env');
+}
 
 $app->registerComponent('config', new Config());
 
