@@ -9,7 +9,8 @@ use framework\web\blaze\interfaces\RootContext;
 class FileField extends Widget
 {
     public string $name;
-    public string $label;
+    public string $label = '';
+    public bool $readonly = false;
 
     public function run(RootContext $ctx)
     {
@@ -19,12 +20,14 @@ class FileField extends Widget
             return $this->renderPartial('file-field', [
                 'name' => $this->name,
                 'label' => $this->label,
+                'readonly' => $this->readonly,
             ]);
         }
         return $this->renderPartial('active-file-field', [
             'model' => $model->model,
             'name' => $this->name,
             'label' => $this->label,
+            'readonly' => $this->readonly,
         ]);
     }
 }
