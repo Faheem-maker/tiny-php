@@ -21,6 +21,8 @@ Routes::group('/auth', function () {
     Routes::get('/logout', [AuthController::class, 'logout'])->middleware(Auth::class);
 });
 
+Routes::get('/media/{path}', 'FileController@index');
+
 /**
  * Add Routes here
  * 
