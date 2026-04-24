@@ -22,6 +22,7 @@ class TextField extends Widget
             'model' => $model->model,
             'name' => $this->name,
             'readonly' => $this->readonly,
+            'value' => $model->model->safe_get($this->name)
         ]);
     }
 }
