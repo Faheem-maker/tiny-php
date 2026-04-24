@@ -1,4 +1,5 @@
-<form action="{{ app()->url->to($action) }}" method="{{ $method == 'GET' ? 'GET' : 'POST'}}">
+<form action="{{ app()->url->to($action) }}" method="{{ $method == 'GET' ? 'GET' : 'POST'}}"
+    enctype="multipart/form-data">
     @if($method != 'GET' && $method != 'POST')
     <input type="hidden" name="_method" value="{{ $method }}">
     @endif
