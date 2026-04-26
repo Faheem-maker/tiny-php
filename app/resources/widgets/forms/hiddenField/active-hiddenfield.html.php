@@ -1,5 +1,2 @@
-<input type="hidden"
-    name="{{ $model->basename() }}[{{ $name }}]"
-    value="{{ $model->$name }}"
-    id="{{ $model->basename() }}_{{ $name }}"
-    {{ $readonly ? 'readonly' : ''}}>
+<input type="hidden" name="{{ $model->basename() }}[{{ $name }}]" value="{{ $value }}"
+    id="{{ $model->basename() }}_{{ $name }}" {{ $readonly ? 'readonly' : '' }}>
