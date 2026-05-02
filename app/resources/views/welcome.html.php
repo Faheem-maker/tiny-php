@@ -30,7 +30,7 @@
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
             <div class="flex justify-center">
                 <!-- Simple Logo Placeholder -->
-                <img alt="Tiny PHP Logo" src="/public/img/logo.png" class="h-64 w-auto">
+                <img alt="Tiny PHP Logo" src="/img/logo.png" class="h-64 w-auto">
             </div>
 
             <div class="text-center">
@@ -57,8 +57,9 @@
 
                         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
                             Tiny has wonderful, thorough documentation covering every aspect of the framework. Whether
-                            you are new to the framework or have previous experience, we recommend reading all of the
-                            documentation from beginning to end.
+                            you are new to the framework or have previous experience, we recommend using the
+                            documentation
+                            to understand the available features.
                         </p>
                     </div>
 
