@@ -1,5 +1,5 @@
 {
-    "name": "tinyframework/web",
+    "name": "bolt-php/bolt",
     "type": "framework",
     "keywords": [
         "php",
@@ -22,8 +22,8 @@
     },
     "require": {
         "php": ">=8.0",
-        "tinyframework/web-app": ">=1.0.2",
-        "tinyframework/console": ">=1.0.2"
+        "bolt-php/web": ">=1.0.2",
+        "bolt-php/console": ">=1.0.2"
     },
     "scripts": {
         "post-create-project-cmd": [
