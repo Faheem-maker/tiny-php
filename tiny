@@ -1,10 +1,8 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/includes/autoload.php';
+echo "--------------------------------------------------------" . PHP_EOL;
+echo "Notice: 'tiny' has been renamed to 'bolt'." . PHP_EOL;
+echo "Please use 'php bolt' for future commands." . PHP_EOL;
+echo "--------------------------------------------------------" . PHP_EOL . PHP_EOL;
 
-$app = require_once __DIR__ . '/cli/bootstrap.php';
-
-$app->init();
-
-$app->run();
+require_once __DIR__ . '/bolt';
