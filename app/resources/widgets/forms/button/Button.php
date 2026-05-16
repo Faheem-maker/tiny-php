@@ -9,6 +9,10 @@ class Button extends Widget
     public $id = null;
     public $data_onclick = null;
     public $variant = 'transparent';
+
+    public bool $rounded = false;
+    public bool $full = false;
+
     protected $variants = [
         'transparent' => 'text-gray-600 hover:bg-gray-100',
         'primary' => 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200',
@@ -23,7 +27,7 @@ class Button extends Widget
                 'id' => $this->id,
                 'data-onclick' => $this->data_onclick,
             ]),
-            'classes' => $this->variants[$this->variant],
+            'classes' => $this->variants[$this->variant] . ($this->rounded ? ' rounded-xl ' : '') . ($this->full ? ' w-full ' : ''),
             'class' => $this->class_name,
         ]);
     }
