@@ -9,13 +9,15 @@ use framework\web\request\Request;
 
 class AuthController {
     public function register() {
-        return view();
+        return view()->with('user', new User());
     }
 
     public function store(Request $request) {
         $user = User::from($request->post());
 
+        
         if ($user->validate()) {
+            $user->password = password_hash($user->password, PASSWORD_DEFAULT);
             $user->save();
         }
         else {
