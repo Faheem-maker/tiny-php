@@ -1,7 +1,6 @@
 <?php
 
 use app\http\controllers\AuthController;
-use app\http\controllers\HomeController;
 use app\http\middleware\Auth;
 use framework\web\Routes;
 
