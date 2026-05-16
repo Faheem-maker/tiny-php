@@ -2,12 +2,12 @@
 
 namespace app\http\models;
 
-use framework\web\models\attributes\Required;
-use framework\web\models\attributes\Length;
-use framework\web\models\Model;
+use framework\models\attributes\Length;
+use framework\models\attributes\Required;
+use framework\models\Model;
 
 class LoginModel extends Model {
-    #[Required]
+    #[Required()]
     #[Length(min: 8, max: 255)]
     public string $email = '';
 
